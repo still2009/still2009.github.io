@@ -1,0 +1,23 @@
+[
+  {
+    "id": "MPD",
+    "title": "一种基于无标签对齐样本对比预训练的纵向联邦学习框架",
+    "authors": "夏乔林, 李文杰, 成昊, 夏树涛",
+    "status": "授权中国发明专利, 授权号：CN114239863B, (香港专利已授权，US Patent审查中)",
+    "link": "http://epub.cnipa.gov.cn/cred/CN114239863B"
+  },
+  {
+    "id": "纵向蒸馏",
+    "title": "一种面向纵向联邦学习的知识蒸馏方法",
+    "authors": "邓俊锋, 夏乔林, 成昊, 李文杰",
+    "status": "授权中国发明专利, 授权号：CN115034836B",
+    "link": "http://epub.cnipa.gov.cn/patent/CN115034836A?8kt2YOWWXQBD=1665321483684"
+  },
+  {
+    "id": "模型隐私保护",
+    "title": "一种基于联邦学习的隐私保护方法、存储介质及系统",
+    "authors": "夏树涛, 杨雪, 冯岩, 李文杰, 方伟军, 唐小虎",
+    "status": "中国发明专利, 公开号：CN112199702A<br>对应论文：<a href=\"https://dl.acm.org/doi/abs/10.1145/3485447.3512233\">一种精度无损的联邦模型保护方法</a>(TheWebConf 2022)",
+    "link": "http://epub.cnipa.gov.cn/patent/CN112199702A?8kt2YOWWXQBD=1665320666429"
+  }
+]

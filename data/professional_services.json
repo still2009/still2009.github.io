@@ -1,0 +1,26 @@
+[
+  {
+    "type": "talk",
+    "content": "[2024.07] Invited Talk by Meituan Tech Team for <a href=\"https://www.bilibili.com/video/BV1zf421z77K/?spm_id_from=333.337.search-card.all.click&vd_source=63d0143f078e76c878e5598c82c30754\">Multi-Platform Recommendation via Retrieval-Enhanced Vertical Federated Learning</a>"
+  },
+  {
+    "type": "talk",
+    "content": "[2022.10] Invited Talk on <a href=\"https://mp.weixin.qq.com/s/k064gX6v7wiOkr-qx-KhyA\">IJCAI-2022 China FL workshop</a> for Vertical Federated Advertising"
+  },
+  {
+    "type": "talk",
+    "content": "[2020.11] Invited Talk on <a href=\"https://mp.weixin.qq.com/s/ODrC2jHKOPXZURTz2GP7CQ\">NeurIPS-2020 special event of AI Technology Review</a> for Deep Gaussian Processes over Graphs"
+  },
+  {
+    "type": "committee",
+    "content": "[2022.9-2023.9] Founding Committee Member of <a href=\"https://www.szccf.org.cn/?p=2964\">Student Chapter of Shenzhen City Computer Federation (SZCCF)</a>"
+  },
+  {
+    "type": "contributor",
+    "content": "[2021-2022] Oteam Code Contributor of Tencent Federated Learning System <a href=\"https://data.qq.com/powerfl/\">Angel PowerFL</a>"
+  },
+  {
+    "type": "pc",
+    "content": "Program Committee Members: ICCV-2025, CVPR-2025, UAI-2025, WWW-2025, MM-2024, FL-CVPR2024, UAI-2024, IJCAI-24, ICLR-2024, WWW-2024(Ind.), DASFAA-24, NeurIPS-2023, UAI-2023, AAAI-2022, WWW-2022(Ind.), <a href=\"https://pretraining.github.io/\">ICML-2022 (The 1st Pre-training Workshop)</a>"
+  }
+]

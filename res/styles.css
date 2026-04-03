@@ -284,3 +284,48 @@ footer {
 h3 {
   margin:0 0 10px;
 }
+
+/* 折叠/展开功能样式 */
+.collapsible {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-icon {
+  margin-right: 8px;
+  font-size: 12px;
+  transition: transform 0.3s ease;
+}
+
+.collapsible:hover {
+  color: #39c;
+}
+
+.content {
+  margin-left: 0;
+  margin-bottom: 15px;
+}
+
+/* 响应式设计调整 */
+@media print, screen and (max-width: 720px) {
+  .content {
+    margin-left: 0;
+  }
+}
+
+@media print, screen and (max-width: 480px) {
+  .content {
+    margin-left: 0;
+  }
+}
+
+/* 缩小标题间距 */
+h2.module {
+  margin: 20px 0 5px;
+}
+
+h4.module {
+  margin: 10px 0 5px;
+}

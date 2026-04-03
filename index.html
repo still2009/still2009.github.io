@@ -138,6 +138,130 @@
           return result;
         }
 
+        // 排序函数：按照CCF级别、作者位次、年份排序
+        function sortPapers(papers, targetAuthor) {
+          // 学术级别优先级映射
+          // 优先级：CCF-A(6) > 中科院一区(5) > CCF-B(4) > 中科院二区(3) > CCF-C(2) > 中科院三区(1) > 其他(0)
+          const levelPriority = {
+            'CCF-A+': 6,
+            'CCF-A': 6,
+            'CCF-A workshop': 5.5,
+            '中科院一区': 5,
+            'CCF-B': 4,
+            'CCF-B workshop': 3.5,
+            '中科院二区': 3,
+            'CCF-C': 2,
+            'CCF-C workshop': 1.5,
+            '中科院三区': 1,
+            '中科院四区': 0.5,
+            'arXiv': 0,
+            'Workshop': 0
+          };
+          
+          // 获取学术级别优先级
+          function getLevelPriority(venueType) {
+            if (!venueType) return 0;
+            // 提取基础级别（去除workshop后缀）
+            const baseType = venueType.replace(' workshop', '');
+            return levelPriority[venueType] || levelPriority[baseType] || 0;
+          }
+          
+          // 判断是否属于第一梯队（CCF-A类 或 中科院一区）
+          function isFirstTier(venueType) {
+            if (!venueType) return false;
+            const baseType = venueType.replace(' workshop', '');
+            return baseType === 'CCF-A' || baseType === 'CCF-A+' || baseType === '中科院一区';
+          }
+          
+          // 获取作者位次
+          function getAuthorPosition(authors, target) {
+            if (!authors || !target) return Infinity;
+            
+            // 分割作者列表
+            const authorList = authors.split(/,\s*/);
+            
+            for (let i = 0; i < authorList.length; i++) {
+              const author = authorList[i].trim();
+              // 检查是否是目标作者（考虑共同第一作者标记）
+              if (author.includes(target) || author.includes(target.replace(' ', ''))) {
+                // 检查是否是共同第一作者
+                if (author.includes('*') || author.includes('(co-first)')) {
+                  return 1.5; // 共同第一作者
+                }
+                return i + 1; // 普通作者位次
+              }
+            }
+            return Infinity; // 作者不在列表中
+          }
+          
+          // 从venue中提取年份
+          function getYear(venue) {
+            if (!venue) return 0;
+            const yearMatch = venue.match(/\b(20\d{2})\b/);
+            return yearMatch ? parseInt(yearMatch[1]) : 0;
+          }
+          
+          // 排序逻辑
+          return papers.sort((a, b) => {
+            const isFirstTierA = isFirstTier(a.venue_type);
+            const isFirstTierB = isFirstTier(b.venue_type);
+            
+            // 第一梯队（CCF-A/中科院一区）：学术级别 > 作者位次 > 年份
+            if (isFirstTierA && isFirstTierB) {
+              // 1. 按学术级别排序（降序）
+              const levelA = getLevelPriority(a.venue_type);
+              const levelB = getLevelPriority(b.venue_type);
+              if (levelA !== levelB) {
+                return levelB - levelA;
+              }
+              
+              // 2. 按作者位次排序（升序）
+              const posA = getAuthorPosition(a.authors, targetAuthor);
+              const posB = getAuthorPosition(b.authors, targetAuthor);
+              if (posA !== posB) {
+                return posA - posB;
+              }
+              
+              // 3. 按年份排序（降序）
+              const yearA = getYear(a.venue);
+              const yearB = getYear(b.venue);
+              if (yearA !== yearB) {
+                return yearB - yearA;
+              }
+            }
+            // 第二梯队（其他类别）：作者位次 > 学术级别 > 年份
+            else if (!isFirstTierA && !isFirstTierB) {
+              // 1. 按作者位次排序（升序）
+              const posA = getAuthorPosition(a.authors, targetAuthor);
+              const posB = getAuthorPosition(b.authors, targetAuthor);
+              if (posA !== posB) {
+                return posA - posB;
+              }
+              
+              // 2. 按学术级别排序（降序）
+              const levelA = getLevelPriority(a.venue_type);
+              const levelB = getLevelPriority(b.venue_type);
+              if (levelA !== levelB) {
+                return levelB - levelA;
+              }
+              
+              // 3. 按年份排序（降序）
+              const yearA = getYear(a.venue);
+              const yearB = getYear(b.venue);
+              if (yearA !== yearB) {
+                return yearB - yearA;
+              }
+            }
+            // 跨梯队比较：第一梯队在前
+            else {
+              return isFirstTierB ? 1 : -1;
+            }
+            
+            // 最后按标题字母顺序排序（升序）
+            return a.title.localeCompare(b.title);
+          });
+        }
+
         // 加载数据函数
         async function loadData(url, callback) {
           try {
@@ -147,6 +271,41 @@
           } catch (error) {
             console.error('Error loading data:', error);
           }
+        }
+
+        // 加载并排序论文数据函数
+        async function loadAndSortPapers(url, containerId, targetAuthor) {
+          try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const sortedData = sortPapers(data, targetAuthor);
+            renderPapers(sortedData, containerId, targetAuthor);
+          } catch (error) {
+            console.error('Error loading and sorting papers:', error);
+          }
+        }
+
+        // 渲染论文数据
+        function renderPapers(data, containerId, targetAuthor) {
+          const container = document.getElementById(containerId);
+          container.innerHTML = ''; // 清空容器
+          data.forEach(function(item) {
+            const li = document.createElement('li');
+            li.id = item.id;
+            const boldedAuthors = boldName(item.authors, targetAuthor);
+            let venueTypeHtml = '';
+            // 隐藏arXiv类型标识
+            if (item.venue_type && item.venue_type !== 'arXiv') {
+              venueTypeHtml = `<span style="font-size: 0.9em; color: #666; margin-left: 10px;">(${item.venue_type})</span>`;
+            }
+            li.innerHTML = `
+              <p><a href="${item.link}">${item.title}</a>
+                <br>${boldedAuthors}<br>
+                <a href="${item.link}"><b>${item.venue}</b></a>${venueTypeHtml}
+              </p>
+            `;
+            container.appendChild(li);
+          });
         }
 
         // 渲染经历数据
@@ -179,46 +338,10 @@
         });
 
         // 渲染联邦学习论文数据
-        loadData('data/federated_learning.json', function(data) {
-          const container = document.getElementById('federated-learning-list');
-          data.forEach(function(item) {
-            const li = document.createElement('li');
-            li.id = item.id;
-            const boldedAuthors = boldName(item.authors, 'Wenjie Li');
-            let venueTypeHtml = '';
-            if (item.venue_type) {
-              venueTypeHtml = `<span style="font-size: 0.9em; color: #666; margin-left: 10px;">(${item.venue_type})</span>`;
-            }
-            li.innerHTML = `
-              <p><a href="${item.link}">${item.title}</a>
-                <br>${boldedAuthors}<br>
-                <a href="${item.link}"><b>${item.venue}</b></a>${venueTypeHtml}
-              </p>
-            `;
-            container.appendChild(li);
-          });
-        });
+        loadAndSortPapers('data/federated_learning.json', 'federated-learning-list', 'Wenjie Li');
 
         // 渲染贝叶斯和图论文数据
-        loadData('data/bayesian_graphs.json', function(data) {
-          const container = document.getElementById('bayesian-graphs-list');
-          data.forEach(function(item) {
-            const li = document.createElement('li');
-            li.id = item.id;
-            const boldedAuthors = boldName(item.authors, 'Wenjie Li');
-            let venueTypeHtml = '';
-            if (item.venue_type) {
-              venueTypeHtml = `<span style="font-size: 0.9em; color: #666; margin-left: 10px;">(${item.venue_type})</span>`;
-            }
-            li.innerHTML = `
-              <p><a href="${item.link}">${item.title}</a>
-                <br>${boldedAuthors}<br>
-                <b>${item.venue}</b>${venueTypeHtml}
-              </p>
-            `;
-            container.appendChild(li);
-          });
-        });
+        loadAndSortPapers('data/bayesian_graphs.json', 'bayesian-graphs-list', 'Wenjie Li');
 
         // 渲染正在进行的研究数据
         loadData('data/ongoing_studies.json', function(data) {

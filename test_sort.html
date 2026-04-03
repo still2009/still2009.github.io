@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>排序测试 - 新规则</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-case { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .expected { background-color: #f0f0f0; padding: 10px; margin: 10px 0; }
+        .actual { background-color: #e6f3ff; padding: 10px; margin: 10px 0; }
+        .pass { color: green; }
+        .fail { color: red; }
+        .tier-info { font-size: 0.9em; color: #666; }
+    </style>
+</head>
+<body>
+    <h1>论文排序测试 - 新规则</h1>
+    <p><strong>规则说明：</strong></p>
+    <ul>
+        <li>第一梯队（CCF-A/中科院一区）：学术级别 > 作者位次 > 年份</li>
+        <li>第二梯队（其他类别）：作者位次 > 学术级别 > 年份</li>
+        <li>学术级别优先级：CCF-A > 中科院一区 > CCF-B > 中科院二区 > CCF-C > 中科院三区</li>
+    </ul>
+    
+    <div id="test-results"></div>
+
+    <script>
+        // 排序函数（复制自index.html）
+        function sortPapers(papers, targetAuthor) {
+          // 学术级别优先级映射
+          // 优先级：CCF-A(6) > 中科院一区(5) > CCF-B(4) > 中科院二区(3) > CCF-C(2) > 中科院三区(1) > 其他(0)
+          const levelPriority = {
+            'CCF-A+': 6,
+            'CCF-A': 6,
+            'CCF-A workshop': 5.5,
+            '中科院一区': 5,
+            'CCF-B': 4,
+            'CCF-B workshop': 3.5,
+            '中科院二区': 3,
+            'CCF-C': 2,
+            'CCF-C workshop': 1.5,
+            '中科院三区': 1,
+            '中科院四区': 0.5,
+            'arXiv': 0,
+            'Workshop': 0
+          };
+          
+          // 获取学术级别优先级
+          function getLevelPriority(venueType) {
+            if (!venueType) return 0;
+            const baseType = venueType.replace(' workshop', '');
+            return levelPriority[venueType] || levelPriority[baseType] || 0;
+          }
+          
+          // 判断是否属于第一梯队（CCF-A类 或 中科院一区）
+          function isFirstTier(venueType) {
+            if (!venueType) return false;
+            const baseType = venueType.replace(' workshop', '');
+            return baseType === 'CCF-A' || baseType === 'CCF-A+' || baseType === '中科院一区';
+          }
+          
+          // 获取作者位次
+          function getAuthorPosition(authors, target) {
+            if (!authors || !target) return Infinity;
+            
+            const authorList = authors.split(/,\s*/);
+            
+            for (let i = 0; i < authorList.length; i++) {
+              const author = authorList[i].trim();
+              if (author.includes(target) || author.includes(target.replace(' ', ''))) {
+                if (author.includes('*') || author.includes('(co-first)')) {
+                  return 1.5;
+                }
+                return i + 1;
+              }
+            }
+            return Infinity;
+          }
+          
+          // 从venue中提取年份
+          function getYear(venue) {
+            if (!venue) return 0;
+            const yearMatch = venue.match(/\b(20\d{2})\b/);
+            return yearMatch ? parseInt(yearMatch[1]) : 0;
+          }
+          
+          // 排序逻辑
+          return papers.sort((a, b) => {
+            const isFirstTierA = isFirstTier(a.venue_type);
+            const isFirstTierB = isFirstTier(b.venue_type);
+            
+            // 第一梯队（CCF-A/中科院一区）：学术级别 > 作者位次 > 年份
+            if (isFirstTierA && isFirstTierB) {
+              const levelA = getLevelPriority(a.venue_type);
+              const levelB = getLevelPriority(b.venue_type);
+              if (levelA !== levelB) {
+                return levelB - levelA;
+              }
+              
+              const posA = getAuthorPosition(a.authors, targetAuthor);
+              const posB = getAuthorPosition(b.authors, targetAuthor);
+              if (posA !== posB) {
+                return posA - posB;
+              }
+              
+              const yearA = getYear(a.venue);
+              const yearB = getYear(b.venue);
+              if (yearA !== yearB) {
+                return yearB - yearA;
+              }
+            }
+            // 第二梯队（其他类别）：作者位次 > 学术级别 > 年份
+            else if (!isFirstTierA && !isFirstTierB) {
+              const posA = getAuthorPosition(a.authors, targetAuthor);
+              const posB = getAuthorPosition(b.authors, targetAuthor);
+              if (posA !== posB) {
+                return posA - posB;
+              }
+              
+              const levelA = getLevelPriority(a.venue_type);
+              const levelB = getLevelPriority(b.venue_type);
+              if (levelA !== levelB) {
+                return levelB - levelA;
+              }
+              
+              const yearA = getYear(a.venue);
+              const yearB = getYear(b.venue);
+              if (yearA !== yearB) {
+                return yearB - yearA;
+              }
+            }
+            // 跨梯队比较：第一梯队在前
+            else {
+              return isFirstTierB ? 1 : -1;
+            }
+            
+            return a.title.localeCompare(b.title);
+          });
+        }
+
+        // 测试用例
+        const testCases = [
+            {
+                name: "测试1: CCF-A > 中科院一区",
+                input: [
+                    { id: 1, title: "Paper A", authors: "Wenjie Li", venue: "TKDE 2024", venue_type: "中科院一区" },
+                    { id: 2, title: "Paper B", authors: "Wenjie Li", venue: "SIGIR 2024", venue_type: "CCF-A" }
+                ],
+                expected: [2, 1]
+            },
+            {
+                name: "测试2: 第一梯队内按作者位次排序",
+                input: [
+                    { id: 1, title: "Paper A", authors: "John Doe, Wenjie Li", venue: "SIGIR 2024", venue_type: "CCF-A" },
+                    { id: 2, title: "Paper B", authors: "Wenjie Li", venue: "TKDE 2024", venue_type: "中科院一区" },
+                    { id: 3, title: "Paper C", authors: "Wenjie Li", venue: "SIGIR 2024", venue_type: "CCF-A" }
+                ],
+                expected: [3, 1, 2]
+            },
+            {
+                name: "测试3: 第二梯队内按作者位次优先",
+                input: [
+                    { id: 1, title: "Paper A", authors: "Wenjie Li", venue: "ICASSP 2024", venue_type: "CCF-B" },
+                    { id: 2, title: "Paper B", authors: "John Doe, Wenjie Li", venue: "TNNLS 2024", venue_type: "中科院二区" },
+                    { id: 3, title: "Paper C", authors: "Wenjie Li", venue: "IJCNN 2024", venue_type: "CCF-C" }
+                ],
+                expected: [1, 3, 2]
+            },
+            {
+                name: "测试4: 第一梯队 vs 第二梯队",
+                input: [
+                    { id: 1, title: "Paper A", authors: "John Doe, Wenjie Li", venue: "ICASSP 2024", venue_type: "CCF-B" },
+                    { id: 2, title: "Paper B", authors: "Wenjie Li", venue: "TKDE 2024", venue_type: "中科院一区" },
+                    { id: 3, title: "Paper C", authors: "Wenjie Li", venue: "SIGIR 2024", venue_type: "CCF-A" }
+                ],
+                expected: [3, 2, 1]
+            },
+            {
+                name: "测试5: 第二梯队内学术级别排序",
+                input: [
+                    { id: 1, title: "Paper A", authors: "Wenjie Li", venue: "IJCNN 2024", venue_type: "CCF-C" },
+                    { id: 2, title: "Paper B", authors: "Wenjie Li", venue: "TETC 2024", venue_type: "中科院三区" },
+                    { id: 3, title: "Paper C", authors: "Wenjie Li", venue: "ICASSP 2024", venue_type: "CCF-B" },
+                    { id: 4, title: "Paper D", authors: "Wenjie Li", venue: "TNNLS 2024", venue_type: "中科院二区" }
+                ],
+                expected: [3, 4, 1, 2]
+            },
+            {
+                name: "测试6: 混合排序 - 第一梯队第二作者 vs 第二梯队第一作者",
+                input: [
+                    { id: 1, title: "Paper A", authors: "John Doe, Wenjie Li", venue: "SIGIR 2024", venue_type: "CCF-A" },
+                    { id: 2, title: "Paper B", authors: "Wenjie Li", venue: "ICASSP 2024", venue_type: "CCF-B" }
+                ],
+                expected: [1, 2]
+            },
+            {
+                name: "测试7: 年份排序（同梯队同作者位次）",
+                input: [
+                    { id: 1, title: "Paper A", authors: "Wenjie Li", venue: "SIGIR 2024", venue_type: "CCF-A" },
+                    { id: 2, title: "Paper B", authors: "Wenjie Li", venue: "SIGIR 2026", venue_type: "CCF-A" },
+                    { id: 3, title: "Paper C", authors: "Wenjie Li", venue: "SIGIR 2025", venue_type: "CCF-A" }
+                ],
+                expected: [2, 3, 1]
+            },
+            {
+                name: "测试8: 完整混合排序",
+                input: [
+                    { id: 1, title: "Paper A", authors: "John Doe, Wenjie Li", venue: "SIGIR 2024", venue_type: "CCF-A" },
+                    { id: 2, title: "Paper B", authors: "Wenjie Li", venue: "TKDE 2023", venue_type: "中科院一区" },
+                    { id: 3, title: "Paper C", authors: "Wenjie Li", venue: "ICASSP 2024", venue_type: "CCF-B" },
+                    { id: 4, title: "Paper D", authors: "John Doe, Wenjie Li", venue: "TNNLS 2025", venue_type: "中科院二区" },
+                    { id: 5, title: "Paper E", authors: "Wenjie Li", venue: "IJCNN 2022", venue_type: "CCF-C" }
+                ],
+                expected: [2, 1, 3, 4, 5]
+            },
+            {
+                name: "测试9: 共同第一作者排序",
+                input: [
+                    { id: 1, title: "Paper A", authors: "Naiqi Li*, Wenjie Li*(co-first)", venue: "NeurIPS 2020", venue_type: "CCF-A" },
+                    { id: 2, title: "Paper B", authors: "Wenjie Li", venue: "SIGIR 2024", venue_type: "CCF-A" },
+                    { id: 3, title: "Paper C", authors: "John Doe, Wenjie Li", venue: "TKDE 2024", venue_type: "中科院一区" }
+                ],
+                expected: [2, 1, 3]
+            },
+            {
+                name: "测试10: 第二梯队中作者位次优先于学术级别",
+                input: [
+                    { id: 1, title: "Paper A", authors: "John Doe, Wenjie Li", venue: "ICASSP 2024", venue_type: "CCF-B" },
+                    { id: 2, title: "Paper B", authors: "Wenjie Li", venue: "IJCNN 2024", venue_type: "CCF-C" },
+                    { id: 3, title: "Paper C", authors: "Wenjie Li", venue: "TNNLS 2024", venue_type: "中科院二区" }
+                ],
+                expected: [2, 3, 1]
+            }
+        ];
+
+        // 运行测试
+        function runTests() {
+            const resultsContainer = document.getElementById('test-results');
+            let allPassed = true;
+
+            testCases.forEach((testCase, index) => {
+                const sorted = sortPapers([...testCase.input], 'Wenjie Li');
+                const actualIds = sorted.map(paper => paper.id);
+                const passed = JSON.stringify(actualIds) === JSON.stringify(testCase.expected);
+                allPassed &= passed;
+
+                const testElement = document.createElement('div');
+                testElement.className = 'test-case';
+                testElement.innerHTML = `
+                    <h3>测试 ${index + 1}: ${testCase.name}</h3>
+                    <div class="tier-info">
+                        <strong>输入数据:</strong><br>
+                        ${testCase.input.map(p => `ID${p.id}: ${p.venue_type}, ${p.authors.includes('Wenjie Li,') ? '第一作者' : (p.authors.includes(', Wenjie Li') ? '第二作者' : '其他')}`).join('<br>')}
+                    </div>
+                    <div class="expected">
+                        <strong>预期结果:</strong> ${testCase.expected.join(', ')}
+                    </div>
+                    <div class="actual">
+                        <strong>实际结果:</strong> ${actualIds.join(', ')}
+                    </div>
+                    <div class="${passed ? 'pass' : 'fail'}">
+                        ${passed ? '✓ 通过' : '✗ 失败'}
+                    </div>
+                `;
+                resultsContainer.appendChild(testElement);
+            });
+
+            const summary = document.createElement('div');
+            summary.style.marginTop = '20px';
+            summary.style.fontWeight = 'bold';
+            summary.className = allPassed ? 'pass' : 'fail';
+            summary.textContent = allPassed ? '所有测试通过！' : '部分测试失败！';
+            resultsContainer.appendChild(summary);
+        }
+
+        // 运行测试
+        runTests();
+    </script>
+</body>
+</html>

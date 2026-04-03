@@ -4,6 +4,7 @@
     "title": "ReFer: Retrieval-Enhanced Vertical Federated Recommendation for Full Set User Benefit",
     "authors": "Wenjie Li, Zhongren Wang, Jinpeng Wang, Shu-Tao Xia, Jile Zhu, Mingjian Chen, Jiangke Fan, Jia Cheng, Jun Lei",
     "venue": "SIGIR 2024",
+    "venue_type": "CCF-A",
     "link": "https://dl.acm.org/doi/abs/10.1145/3626772.3657763"
   },
   {
@@ -11,6 +12,7 @@
     "title": "Vertical Semi-Federated Learning for Efficient Online Advertising",
     "authors": "Wenjie Li, Qiaolin Xia, Hao Cheng, Kouying Xue, Shu-Tao Xia",
     "venue": "TheWebConf 2026",
+    "venue_type": "CCF-A",
     "link": "https://arxiv.org/abs/2209.15635"
   },
   {
@@ -18,6 +20,7 @@
     "title": "Achieving Lightweight Federated Advertising with Self-Supervised Split Distillation",
     "authors": "Wenjie Li, Qiaolin Xia, Junfeng Deng, Hao Cheng, Jiangming Liu, Kouying Xue, Yong Cheng, Shu-Tao Xia",
     "venue": "IJCAI 2022 (w)",
+    "venue_type": "Workshop",
     "link": "https://arxiv.org/abs/2205.15987"
   },
   {
@@ -25,6 +28,7 @@
     "title": "Theoretically Principled Federated Learning for Balancing Privacy and Utility",
     "authors": "Xiaojin Zhang, Wenjie Li, Kai Chen, Shu-tao Xia, Qiang Yang",
     "venue": "arXiv, 2023",
+    "venue_type": "arXiv",
     "link": "https://arxiv.org/abs/2305.15148"
   },
   {
@@ -32,6 +36,7 @@
     "title": "A Game-theoretic Utility Model for Federated Learning",
     "authors": "Xiaojin Zhang, Lixin Fan, Siwei Wang, Wenjie Li, Kai Chen, Qiang Yang",
     "venue": "ACM TIST, 2023",
+    "venue_type": "CCF-B",
     "link": "https://arxiv.org/abs/2304.05836"
   },
   {
@@ -39,6 +44,7 @@
     "title": "Secure and Scalable Face Retrieval via Cancelable Product Quantization",
     "authors": "Haomiao Tang, Wenjie Li, Yixiang Qiu, Genping Wang, Shu-Tao Xia",
     "venue": "PRCV 2025",
+    "venue_type": "CCF-B",
     "link": "https://link.springer.com/chapter/10.1007/978-981-95-5679-3_26"
   },
   {
@@ -46,6 +52,7 @@
     "title": "Coward: Toward Practical Proactive Federated Backdoor Defense via Collision-based Watermark",
     "authors": "Wenjie Li, Siying Gu, Yiming Li, Kangjie Chen, Zhili Chen, Tianwei Zhang, Shu-Tao Xia, Dacheng Tao",
     "venue": "arXiv, 2025",
+    "venue_type": "arXiv",
     "link": "https://ui.adsabs.harvard.edu/abs/2025arXiv250802115L/abstract"
   }
 ]

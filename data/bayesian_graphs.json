@@ -4,6 +4,7 @@
     "title": "DeepCGC: Unveiling the Deep Clustering Mechanism of Fast Graph Condensation",
     "authors": "Xinyi Gao, Wenjie Li, Tong Chen, Xiangyu Zhao, Quoc Viet Hung Nguyen, Hongzhi Yin",
     "venue": "TKDE 2026",
+    "venue_type": "CCF-A",
     "link": "https://ieeexplore.ieee.org/abstract/document/11359095/"
   },
   {
@@ -11,6 +12,7 @@
     "title": "Stochastic Deep Gaussian Processes over Graphs",
     "authors": "Naiqi Li*, Wenjie Li*(co-first), Jifeng Sun, Yinghua Gao, Yong Jiang, Shu-Tao Xia",
     "venue": "NeurIPS 2020",
+    "venue_type": "CCF-A",
     "link": "https://proceedings.neurips.cc/paper/2020/hash/415e1af7ea95f89f4e375162b21ae38c-Abstract.html"
   },
   {
@@ -18,6 +20,7 @@
     "title": "Deep Dirichlet Process Mixture Models",
     "authors": "Naiqi Li*, Wenjie Li*(co-first), Yong Jiang, Shu-Tao Xia",
     "venue": "UAI 2022",
+    "venue_type": "CCF-B",
     "link": "https://openreview.net/forum?id=rOufYULiqe5"
   },
   {
@@ -25,6 +28,7 @@
     "title": "Node-level Graph Regression with Deep Gaussian Process Models",
     "authors": "Naiqi Li*, Wenjie Li*(co-first), Yinghua Gao, Yiming Li, Jigang Bao, Ercan E. Kuruoglu, Yong Jiang, Shu-Tao Xia",
     "venue": "IEEE TAI, 2023",
+    "venue_type": "中科院一区",
     "link": "https://ieeexplore.ieee.org/abstract/document/10374332"
   },
   {
@@ -32,6 +36,7 @@
     "title": "SDCN: Sparsity and Diversity Driven Correlation Networks for Traffic Demand Forecasting",
     "authors": "Wenjie Li, Xue Yang, Xiaohu Tang, Shutao Xia",
     "venue": "IJCNN 2020",
+    "venue_type": "CCF-C",
     "link": "https://ieeexplore.ieee.org/document/9207433"
   },
   {
@@ -39,6 +44,7 @@
     "title": "H-GPR: A Hybrid Strategy for Large-Scale Gaussian Process Regression",
     "authors": "Naiqi Li, Yinghua Gao, Wenjie Li, Yong Jiang, Shu-Tao Xia",
     "venue": "ICASSP 2021",
+    "venue_type": "CCF-B",
     "link": "https://ieeexplore.ieee.org/document/9414474"
   }
 ]

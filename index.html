@@ -185,10 +185,14 @@
             const li = document.createElement('li');
             li.id = item.id;
             const boldedAuthors = boldName(item.authors, 'Wenjie Li');
+            let venueTypeHtml = '';
+            if (item.venue_type) {
+              venueTypeHtml = `<span style="font-size: 0.9em; color: #666; margin-left: 10px;">(${item.venue_type})</span>`;
+            }
             li.innerHTML = `
               <p><a href="${item.link}">${item.title}</a>
                 <br>${boldedAuthors}<br>
-                <a href="${item.link}"><b>${item.venue}</b></a>
+                <a href="${item.link}"><b>${item.venue}</b></a>${venueTypeHtml}
               </p>
             `;
             container.appendChild(li);
@@ -202,10 +206,14 @@
             const li = document.createElement('li');
             li.id = item.id;
             const boldedAuthors = boldName(item.authors, 'Wenjie Li');
+            let venueTypeHtml = '';
+            if (item.venue_type) {
+              venueTypeHtml = `<span style="font-size: 0.9em; color: #666; margin-left: 10px;">(${item.venue_type})</span>`;
+            }
             li.innerHTML = `
               <p><a href="${item.link}">${item.title}</a>
                 <br>${boldedAuthors}<br>
-                <b>${item.venue}</b>
+                <b>${item.venue}</b>${venueTypeHtml}
               </p>
             `;
             container.appendChild(li);

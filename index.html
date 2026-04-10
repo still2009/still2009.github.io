@@ -10,6 +10,52 @@
     <meta name="viewport" content="width=device-width">
     <script src="https://kit.fontawesome.com/8350379f5a.js" crossorigin="anonymous"></script>
     <meta name="google-site-verification" content="zH4W4c_aEplfn_k7wYwprjzoHa0n_9NkizpZT7i4HF8" />
+    <style>
+      /* 为正在进行的研究列表添加样式 */
+      .ongoing-list {
+        list-style-type: disc;
+        margin-left: 0;
+        padding-left: 20px;
+        margin-top: 10px;
+      }
+      
+      /* 确保列表项不可点击，也不响应悬停效果 */
+      .ongoing-list li {
+        margin-bottom: 5px;
+        cursor: default;
+        user-select: none;
+        background-color: transparent !important;
+      }
+      
+      /* 调整Ongoing Studies标题的样式 */
+      .ongoing-title {
+        color: #333;
+        cursor: pointer;
+      }
+      
+      /* 为列表项中的折叠元素添加样式 */
+      ol li.collapsible {
+        display: block;
+        position: relative;
+      }
+      
+      /* 调整折叠图标的位置 */
+      ol li.collapsible .toggle-icon {
+        position: absolute;
+        left: -20px;
+        top: 3px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      
+      /* 调整内容区域的样式 */
+      ol li.collapsible .content {
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
+        display: block;
+      }
+    </style>
 </head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8V8XWXJ3RS"></script>
@@ -32,14 +78,14 @@
         <h3>Computer Science</h3>
         <p>liwj20@mails.tsinghua.edu.cn</p>
         <p><a href="https://scholar.google.com/citations?hl=en&user=05AhUcwAAAAJ" target="_blank" rel="noopener"><i class="fa-brands fa-google"></i> Google Scholar</a></p>
-        <p><a href="https://github.com/still2009" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a></p>
+        <!-- <p><a href="https://github.com/still2009" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a></p> -->
         <p><a href="cv.html"><i class="fa-solid fa-user"></i> CV</a></p>
       </header>
 
       <section>
         <h2 class="module">About Me</h2>
         <p class="compact">Hi! I am a final year Ph.D. candidate of computer science at <a href="https://www.tsinghua.edu.cn/">Tsinghua University</a>, supervised by Prof. <a href="https://scholar.google.com/citations?user=koAXTXgAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener">Shu-Tao Xia</a> (<a href="https://www.sigs.tsinghua.edu.cn/xst/list.htm" target="_blank" rel="noopener">home</a>). I received both my BSc and MSc of Information Security from <a href="https://www.swjtu.edu.cn/" target="_blank" rel="noopener">Southwest Jiaotong University</a>, supervised by Prof. <a href="https://scholar.google.com/citations?user=nbG1tz0AAAAJ&hl=en" target="_blank" rel="noopener">Xiaohu Tang</a> (<a href="https://faculty.swjtu.edu.cn/tangxiaohu" target="_blank" rel="noopener">home</a>). I am also being supervised by <a href="https://sites.google.com/view/hongzhi-yin/home">Prof. Hongzhi Yin</a> on recommender systems during my academic visit to <a href="https://uq.edu.au">The University of Queensland</a>. </p>
-        <p class="compact">My research interests are in <b>Federated Recommender Systems</b>, <b>Probabilistic Representation Learning</b>, and their intersection with Graphs, Privacy, and Foundation Models in cross Edge/Cloud scenarios. I am currently focusing on the topic of <a href="pdf/CAI_Research_Summary.pdf">Cost-Effective Vertical Federated Learning for Multi-Platform Collaborative Recommendation (CAI24')</a> and am always open to collaborations or discussions on related problems or modeling tools. Welcome to email me :)</p>
+        <p class="compact">My research interests are in <b>Recommender Systems</b>, <b>Statistical Learning</b> and their intersection with <i>Graphs</i>, <i>Trustworthyness</i>, and <i>Foundation Models</i>. My PhD thesis is on the topic of <a href="pdf/CAI_Research_Summary.pdf">Cost-Effective Multi-Platform Recommendation via Vertical Federated Learning(CAI24')</a> and am always open to collaborations or discussions on related problems or modeling tools. Welcome to email me :)</p>
 
         <h2 class="module collapsible">
           <span class="toggle-icon">▼</span> Experiences
@@ -60,10 +106,17 @@
         </h2>
         <div class="content">
           <h4 class="module collapsible">
-            <span class="toggle-icon">▼</span> Recommendation
+            <span class="toggle-icon">▼</span> Recommender System
           </h4>
           <div class="content">
             <ol id="recommendation-list"></ol>
+          </div>
+          
+          <h4 class="module collapsible">
+            <span class="toggle-icon">▼</span> Graph and Statistical Learning
+          </h4>
+          <div class="content">
+            <ol id="graph-statistical-learning-list"></ol>
           </div>
           
           <h4 class="module collapsible">
@@ -71,20 +124,6 @@
           </h4>
           <div class="content">
             <ol id="trustworthy-ai-list"></ol>
-          </div>
-          
-          <h4 class="module collapsible">
-            <span class="toggle-icon">▼</span> Bayesian & Graphs
-          </h4>
-          <div class="content">
-            <ol id="bayesian-graphs-list"></ol>
-          </div>
-
-          <h4 class="module collapsible">
-            <span class="toggle-icon">▼</span> Other Ongoing Studies
-          </h4>
-          <div class="content">
-            <ul id="ongoing-studies-list"></ul>
           </div>
         </div>
 
@@ -336,7 +375,12 @@
           data.forEach(function(item) {
             const li = document.createElement('li');
             if (item.type === 'pc') {
-              li.innerHTML = `<b>${item.content}</b>`;
+              if (item.link) {
+                // 将链接以注释形式保存在HTML源代码中
+                li.innerHTML = `<b>${item.content}</b><!-- Link: ${item.link} -->`;
+              } else {
+                li.innerHTML = `<b>${item.content}</b>`;
+              }
             } else {
               li.innerHTML = `<p class="compact">${item.content}</p>`;
             }
@@ -344,25 +388,83 @@
           });
         });
 
-        // 渲染推荐系统论文数据
-        loadAndSortPapers('data/recommendation.json', 'recommendation-list', 'Wenjie Li');
-        
-        // 渲染可信AI论文数据
-        loadAndSortPapers('data/trustworthy_ai.json', 'trustworthy-ai-list', 'Wenjie Li');
+        // 加载并渲染所有论文数据
+        loadData('data/papers.json', function(papers) {
+          // 渲染推荐系统论文数据
+          loadAndSortPapersFromData(papers.recommender_system.published, 'recommendation-list', 'Wenjie Li', papers.recommender_system.ongoing);
+          
+          // 渲染可信AI论文数据
+          loadAndSortPapersFromData(papers.trustworthy_ai.published, 'trustworthy-ai-list', 'Wenjie Li', papers.trustworthy_ai.ongoing);
 
-        // 渲染贝叶斯和图论文数据
-        loadAndSortPapers('data/bayesian_graphs.json', 'bayesian-graphs-list', 'Wenjie Li');
+          // 渲染图和统计学习论文数据
+          loadAndSortPapersFromData(papers.graph_statistical_learning.published, 'graph-statistical-learning-list', 'Wenjie Li', papers.graph_statistical_learning.ongoing);
+        });
 
-        // 渲染正在进行的研究数据
-        loadData('data/ongoing_studies.json', function(data) {
-          const container = document.getElementById('ongoing-studies-list');
+        // 从数据对象渲染排序后的论文
+        function loadAndSortPapersFromData(data, containerId, targetAuthor, ongoingData) {
+          const sortedData = sortPapers(data, targetAuthor);
+          renderPapers(sortedData, containerId, targetAuthor);
+          
+          // 添加Ongoing Studies作为列表的最后一项
+          if (ongoingData && ongoingData.length > 0) {
+            const container = document.getElementById(containerId);
+            const li = document.createElement('li');
+            li.className = 'collapsible';
+            li.innerHTML = `
+              <span class="toggle-icon">▼</span>
+              <div class="ongoing-title">Ongoing Studies</div>
+              <div class="content">
+                <ul class="ongoing-list">
+                  ${ongoingData.map(item => `<li>${item.title}</li>`).join('')}
+                </ul>
+              </div>
+            `;
+            container.appendChild(li);
+            
+            // 为Ongoing Studies添加折叠/展开功能
+            const toggleIcon = li.querySelector('.toggle-icon');
+            const ongoingTitle = li.querySelector('.ongoing-title');
+            const content = li.querySelector('.content');
+            
+            // 设置默认状态为不展开
+            content.style.display = 'none';
+            toggleIcon.textContent = '▶';
+            
+            // 只让标题和图标可点击
+            function toggleContent() {
+              if (content.style.display === 'none') {
+                content.style.display = 'block';
+                toggleIcon.textContent = '▼';
+              } else {
+                content.style.display = 'none';
+                toggleIcon.textContent = '▶';
+              }
+            }
+            
+            // 为标题和图标添加点击事件，阻止事件冒泡
+            toggleIcon.addEventListener('click', function(e) {
+              e.stopPropagation();
+              toggleContent();
+            });
+            
+            ongoingTitle.addEventListener('click', function(e) {
+              e.stopPropagation();
+              toggleContent();
+            });
+          }
+        }
+
+        // 渲染正在进行的研究
+        function renderOngoingStudies(data, containerId) {
+          const container = document.getElementById(containerId);
+          container.innerHTML = ''; // 清空容器
           data.forEach(function(item) {
             const li = document.createElement('li');
             li.id = item.id;
             li.textContent = item.title;
             container.appendChild(li);
           });
-        });
+        }
 
         // 渲染专利数据
         loadData('data/patents.json', function(data) {

@@ -1,14 +1,14 @@
 [
   {
     "id": "MPD",
-    "title": "一种基于无标签对齐样本对比预训练的纵向联邦学习框架",
+    "title": "一种面向多平台联合推荐的预训练框架",
     "authors": "夏乔林, 李文杰, 成昊, 夏树涛",
     "status": "授权中国发明专利, 授权号：CN114239863B, (香港专利已授权，US Patent审查中)",
     "link": "http://epub.cnipa.gov.cn/cred/CN114239863B"
   },
   {
     "id": "纵向蒸馏",
-    "title": "一种面向纵向联邦学习的知识蒸馏方法",
+    "title": "一种面向多平台联合推荐的非对称知识蒸馏方法",
     "authors": "邓俊锋, 夏乔林, 成昊, 李文杰",
     "status": "授权中国发明专利, 授权号：CN115034836B",
     "link": "http://epub.cnipa.gov.cn/patent/CN115034836A?8kt2YOWWXQBD=1665321483684"

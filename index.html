@@ -60,10 +60,17 @@
         </h2>
         <div class="content">
           <h4 class="module collapsible">
-            <span class="toggle-icon">▼</span> Federated Learning
+            <span class="toggle-icon">▼</span> Recommendation
           </h4>
           <div class="content">
-            <ol id="federated-learning-list"></ol>
+            <ol id="recommendation-list"></ol>
+          </div>
+          
+          <h4 class="module collapsible">
+            <span class="toggle-icon">▼</span> Trustworthy AI
+          </h4>
+          <div class="content">
+            <ol id="trustworthy-ai-list"></ol>
           </div>
           
           <h4 class="module collapsible">
@@ -337,8 +344,11 @@
           });
         });
 
-        // 渲染联邦学习论文数据
-        loadAndSortPapers('data/federated_learning.json', 'federated-learning-list', 'Wenjie Li');
+        // 渲染推荐系统论文数据
+        loadAndSortPapers('data/recommendation.json', 'recommendation-list', 'Wenjie Li');
+        
+        // 渲染可信AI论文数据
+        loadAndSortPapers('data/trustworthy_ai.json', 'trustworthy-ai-list', 'Wenjie Li');
 
         // 渲染贝叶斯和图论文数据
         loadAndSortPapers('data/bayesian_graphs.json', 'bayesian-graphs-list', 'Wenjie Li');

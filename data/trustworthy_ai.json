@@ -1,29 +1,5 @@
 [
   {
-    "id": "ReFer",
-    "title": "ReFer: Retrieval-Enhanced Vertical Federated Recommendation for Full Set User Benefit",
-    "authors": "Wenjie Li, Zhongren Wang, Jinpeng Wang, Shu-Tao Xia, Jile Zhu, Mingjian Chen, Jiangke Fan, Jia Cheng, Jun Lei",
-    "venue": "SIGIR 2024",
-    "venue_type": "CCF-A",
-    "link": "https://dl.acm.org/doi/abs/10.1145/3626772.3657763"
-  },
-  {
-    "id": "FedJPL",
-    "title": "Vertical Semi-Federated Learning for Efficient Online Advertising",
-    "authors": "Wenjie Li, Shu-Tao Xia, Jiangke Fan, Teng Zhang, Xingxing Wang",
-    "venue": "TheWebConf 2026",
-    "venue_type": "CCF-A",
-    "link": "https://dl.acm.org/doi/10.1145/3774904.3792940"
-  },
-  {
-    "id": "VFedSSD",
-    "title": "Achieving Lightweight Federated Advertising with Self-Supervised Split Distillation",
-    "authors": "Wenjie Li, Qiaolin Xia, Junfeng Deng, Hao Cheng, Jiangming Liu, Kouying Xue, Yong Cheng, Shu-Tao Xia",
-    "venue": "IJCAI 2022",
-    "venue_type": "CCF-A workshop",
-    "link": "https://arxiv.org/abs/2205.15987"
-  },
-  {
     "id": "FedDistLearn",
     "title": "Theoretically Principled Federated Learning for Balancing Privacy and Utility",
     "authors": "Xiaojin Zhang, Wenjie Li, Kai Chen, Shu-tao Xia, Qiang Yang",
